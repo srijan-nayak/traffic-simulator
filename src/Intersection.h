@@ -26,6 +26,8 @@ public:
 private:
     std::vector<std::shared_ptr<Vehicle>> _vehicles;          // list of all vehicles waiting to enter this intersection
     std::vector<std::promise<void>> _promises; // list of associated promises
+
+    static std::mutex _mutex;
 };
 
 class Intersection : public TrafficObject {
