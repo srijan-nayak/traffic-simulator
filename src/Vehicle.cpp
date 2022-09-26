@@ -1,4 +1,3 @@
-#include <future>
 #include <iostream>
 #include <random>
 #include "Street.h"
@@ -28,6 +27,8 @@ void Vehicle::simulate() {
 
 // virtual function which is executed in a thread
 void Vehicle::drive() {
+    // L3.3 : Ensure that the text output locks the console as a shared resource. Use the mutex _mtxCout you have added to the base class TrafficObject in the previous task. 
+
     // print id of the current thread
     std::cout << "Vehicle #" << _id << "::drive: thread id = " << std::this_thread::get_id() << std::endl;
 
@@ -70,8 +71,12 @@ void Vehicle::drive() {
 
             // check wether halting position in front of destination has been reached
             if (completion >= 0.9 && !hasEnteredIntersection) {
-                auto future = std::async(&Intersection::addVehicleToQueue, _currDestination, this->get_shared_this());
-                future.wait();
+                // request entry to the current intersection (using async)
+                auto ftrEntryGranted = std::async(&Intersection::addVehicleToQueue, _currDestination,
+                                                  get_shared_this());
+
+                // wait until entry has been granted
+                ftrEntryGranted.get();
 
                 // slow down and set intersection flag
                 _speed /= 10.0;
