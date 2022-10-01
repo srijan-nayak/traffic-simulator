@@ -1,13 +1,12 @@
+#include <algorithm>
 #include <iostream>
 #include <chrono>
-#include <algorithm>
-#include <mutex>
 #include "TrafficObject.h"
-
-std::mutex TrafficObject::_mtxCout;
 
 // init static variable
 int TrafficObject::_idCnt = 0;
+
+std::mutex TrafficObject::_mtx;
 
 void TrafficObject::setPosition(double x, double y) {
     _posX = x;
