@@ -57,6 +57,8 @@ void TrafficLight::cycleThroughPhases() {
         if (timeSinceLastUpdate < cycleDuration) continue;
 
         _currentPhase = _currentPhase == TrafficLightPhase::red ? TrafficLightPhase::green : TrafficLightPhase::red;
+        _messageQueue.send(std::move(_currentPhase));
+
         lastUpdate = std::chrono::system_clock::now();
     }
 }
